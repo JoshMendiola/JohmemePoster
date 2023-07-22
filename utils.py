@@ -1,6 +1,9 @@
 import os
 import random
 import glob
+import time
+import shutil
+
 
 captions = [
     "MEOW !!!",
@@ -8,6 +11,27 @@ captions = [
     "I saw a cat today, it was nice :)",
     "God i love having a meme page"
 ]
+
+
+def create_post(parent_directory):
+    subfolders = [folder.path for folder in os.scandir(parent_directory) if folder.is_dir()]
+    if not subfolders:
+        return None
+    current_timestamp = time.time()
+    directory_path = f'/Users/joshuamendiola/Documents/Johmemes/Posts/{current_timestamp}'
+    os.makedirs(directory_path, exist_ok=True)
+
+    for i in range(2):
+        if not subfolders:
+            break
+        selected_meme = random.choice(subfolders)
+        subfolders.remove(selected_meme)
+        files = glob.glob(os.path.join(selected_meme, '*'))  # Get all files in the selected folder
+        for f in files:
+            shutil.move(f, directory_path)
+
+    return directory_path
+
 
 def get_random_subfolder_path(parent_directory):
     subfolders = [folder.path for folder in os.scandir(parent_directory) if folder.is_dir()]
