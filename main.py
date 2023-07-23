@@ -26,6 +26,6 @@ if __name__ == '__main__':
     post = utils.create_post("/Users/joshuamendiola/Documents/Johmemes/Memes/")
     if post is not None:
         post_to_instagram(post)
-    # shutil.rmtree(post)
+    shutil.rmtree(post)
 
 

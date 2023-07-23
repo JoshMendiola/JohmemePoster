@@ -21,7 +21,7 @@ def create_post(parent_directory):
     directory_path = f'/Users/joshuamendiola/Documents/Johmemes/Posts/{current_timestamp}'
     os.makedirs(directory_path, exist_ok=True)
 
-    for i in range(2):
+    for i in range(3):
         if not subfolders:
             break
         selected_meme = random.choice(subfolders)
