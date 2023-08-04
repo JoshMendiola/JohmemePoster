@@ -12,20 +12,25 @@ def login_instagram():
     return cli
 
 
-def post_to_instagram(post_folder_path):
+def post_to_instagram(instagram_client, post_folder_path):
     sorted_memes = utils.get_sorted_memes(post_folder_path)
     print(sorted_memes)
     if len(sorted_memes) == 1:
         instagram_client.photo_upload(sorted_memes[0], utils.get_random_caption())
-    else :
+    else:
         instagram_client.album_upload(sorted_memes, utils.get_random_caption())
 
 
-if __name__ == '__main__':
+def main():
     instagram_client = login_instagram()
     post = utils.create_post("/Users/joshuamendiola/Documents/Johmemes/Memes/")
     if post is not None:
-        post_to_instagram(post)
+        post_to_instagram(instagram_client, post)
     shutil.rmtree(post)
 
+def lambda_handler(event, context):
+    main()
 
+
+if __name__ == '__main__':
+    main()
