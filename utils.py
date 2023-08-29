@@ -1,16 +1,9 @@
+import json
 import os
 import random
 import glob
 import time
 import shutil
-
-
-captions = [
-    "MEOW !!!",
-    "Cant stop wont stop",
-    "I saw a cat today, it was nice :)",
-    "God i love having a meme page"
-]
 
 
 def create_post(parent_directory):
@@ -45,6 +38,18 @@ def get_sorted_memes(directory):
     return sorted(glob.glob(os.path.join(directory, '*')))
 
 
-def get_random_caption():
-    return random.choice(captions)
+def get_random_caption(file_path):
+    with open(file_path, 'r') as f:
+        captions = json.load(f)
+
+    if len(captions) == 0:
+        return None
+
+    random_caption = random.choice(captions)
+    captions.remove(random_caption)
+
+    with open(file_path, 'w') as f:
+        json.dump(captions, f)
+
+    return random_caption
 
