@@ -6,32 +6,31 @@ import time
 import shutil
 
 
-def create_post(parent_directory):
-    subfolders = [folder.path for folder in os.scandir(parent_directory) if folder.is_dir()]
-    if not subfolders:
-        return None
-    current_timestamp = time.time()
-    directory_path = f'/Users/joshuamendiola/Documents/Johmemes/Posts/{current_timestamp}'
-    os.makedirs(directory_path, exist_ok=True)
+# creates a combined folder of 3 memes to be together in a "post"
+def create_post(memes_directory):
 
+    # grabs the subfolders within the memes folder
+    memes_in_folder = [folder.path for folder in os.scandir(memes_directory) if folder.is_dir()]
+    if not memes_in_folder:
+        return None
+
+    # creates the folder
+    current_timestamp = time.time()
+    new_post_directory_path = f'/Users/joshuamendiola/Documents/Johmemes/Posts/{current_timestamp}'
+    os.makedirs(new_post_directory_path, exist_ok=True)
+
+    # moves three memes in the post folder
     for i in range(3):
-        if not subfolders:
+        if not memes_in_folder:
             break
-        selected_meme = random.choice(subfolders)
-        subfolders.remove(selected_meme)
+        selected_meme = random.choice(memes_in_folder)
+        memes_in_folder.remove(selected_meme)
         files = glob.glob(os.path.join(selected_meme, '*'))  # Get all files in the selected folder
         for f in files:
-            shutil.move(f, directory_path)
+            shutil.move(f, new_post_directory_path)
+        shutil.rmtree(selected_meme)
 
-    return directory_path
-
-
-def get_random_subfolder_path(parent_directory):
-    subfolders = [folder.path for folder in os.scandir(parent_directory) if folder.is_dir()]
-    if subfolders:
-        return random.choice(subfolders)
-    else:
-        return None
+    return new_post_directory_path
 
 
 def get_sorted_memes(directory):

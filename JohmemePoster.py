@@ -6,16 +6,17 @@ from instagrapi import Client
 import utils
 
 
+# logins to instagram using the credentials in the config file
 def login_instagram():
-    # Determine if the script is running as a bundled executable or normally
+    # checks where the config file is stored in case of running as application
     if getattr(sys, 'frozen', False):
-        current_path = sys._MEIPASS  # running as a bundled executable
+        current_path = sys._MEIPASS
     else:
         current_path = os.path.dirname(__file__)  # running normally
 
     config_file_path = os.path.join(current_path, 'config.ini')
 
-    # Add error-handling to debug more easily
+    # logs in
     try:
         config = configparser.ConfigParser()
         config.read(config_file_path)
@@ -30,6 +31,7 @@ def login_instagram():
         raise
 
 
+# takes the posts organized in the post folder and sends them up to the api
 def post_to_instagram(instagram_client, post_folder_path):
     sorted_memes = utils.get_sorted_memes(post_folder_path)
     print(sorted_memes)
@@ -39,6 +41,7 @@ def post_to_instagram(instagram_client, post_folder_path):
     else:
         instagram_client.album_upload(sorted_memes, utils.get_random_caption("/Users/joshuamendiola/PycharmProjects"
                                                                              "/JohmemePoster/captions.json"))
+    shutil.rmtree(post_folder_path)
 
 
 def main():
